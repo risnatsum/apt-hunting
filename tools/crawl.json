@@ -1,0 +1,7 @@
+[
+  {"name": "estate-beaudry-tower", "url": "https://www.28hse.com/en/estate/detail/beaudry-tower-426", "follow": "beaudry-tower-426/(?!transaction)", "img": "28hse\\.com/(?!assets)"},
+  {"name": "estate-honor-villa", "url": "https://www.28hse.com/en/estate/detail/honor-villa-431", "follow": "honor-villa-431/(?!transaction)", "img": "28hse\\.com/(?!assets)"},
+  {"name": "estate-ming-sun", "url": "https://www.28hse.com/en/estate/detail/ming-sun-building-24697", "follow": "ming-sun-building-24697/(?!transaction)", "img": "28hse\\.com/(?!assets)"},
+  {"name": "estate-ying-wa", "url": "https://www.28hse.com/en/estate/search?q=Ying+Wa+Court", "follow": "estate/detail/ying-wa", "img": "28hse\\.com/(?!assets)"},
+  {"name": "estate-ying-wa-sqf", "url": "https://www.squarefoot.com.hk/en/estate/detail/ying-wa-court-516", "follow": "ying-wa-court-516/(?!transaction)", "img": "squarefoot|floor|plan"}
+]

@@ -145,7 +145,58 @@ def fetch_pages():
             print("page failed", url, e, file=sys.stderr)
 
 
+def crawl():
+    """tools/crawl.json: [{name, url, follow (regex), img (regex)}]. Saves the start page,
+    pages it links to whose URL matches `follow`, and every image matching `img`
+    found on them into candidates/<name>/."""
+    cfg_path = os.path.join(ROOT, "tools", "crawl.json")
+    if not os.path.exists(cfg_path):
+        return
+    for job in json.load(open(cfg_path, encoding="utf8")):
+        d = os.path.join(ROOT, "candidates", job["name"])
+        os.makedirs(d, exist_ok=True)
+        index_path = os.path.join(d, "index.json")
+        index = json.load(open(index_path)) if os.path.exists(index_path) else []
+        have = {c["image"] for c in index}
+        queue, seen = [job["url"]], set()
+        while queue and len(seen) < job.get("maxPages", 12):
+            url = queue.pop(0)
+            if url in seen:
+                continue
+            seen.add(url)
+            try:
+                page, _ = get(url)
+            except Exception as e:
+                print("crawl failed", url, e, file=sys.stderr)
+                continue
+            text = page.decode("utf8", "ignore")
+            slug = re.sub(r"[^a-z0-9]+", "-", url.lower())[-80:]
+            open(os.path.join(d, "page-" + slug + ".html"), "w", encoding="utf8").write(text)
+            print("crawled", url)
+            links = {urllib.parse.urljoin(url, html.unescape(h)) for h in re.findall(r'href="([^"#]+)"', text)}
+            if url == job["url"]:
+                queue += sorted(l for l in links if re.search(job.get("follow", "$^"), l, re.I))
+            imgs = {urllib.parse.urljoin(url, html.unescape(u)) for u in re.findall(r'(?:src|href|data-src|data-original)="([^"]+?\.(?:jpe?g|png|gif|webp)[^"]*)"', text, re.I)}
+            imgs |= set(re.findall(r'https?://[^"\'\s<>]+?\.(?:jpe?g|png|gif|webp)', text, re.I))
+            for im in sorted(imgs):
+                if im in have or not re.search(job.get("img", "."), im, re.I):
+                    continue
+                have.add(im)
+                try:
+                    data, ctype = get(im, referer=url, timeout=20)
+                    if len(data) < 8000:
+                        continue
+                    name = hashlib.sha1(im.encode()).hexdigest()[:10] + ext_for(im, ctype)
+                    open(os.path.join(d, name), "wb").write(data)
+                    index.append({"image": im, "page": url, "file": name})
+                    print("image", job["name"], name, im)
+                except Exception as e:
+                    print("image failed", im, e, file=sys.stderr)
+        json.dump(index, open(index_path, "w"), indent=2, ensure_ascii=False)
+
+
 if __name__ == "__main__":
     download_listing_assets(load_apartments())
     search_candidates()
     fetch_pages()
+    crawl()

@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: [apartments.js, tools/searches.json, tools/pages.json, tools/fetch_assets.py]
+    paths: [apartments.js, tools/**]
 
 permissions:
   contents: write
