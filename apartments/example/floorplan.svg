@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="600" viewBox="0 0 720 600" font-family="Helvetica,Arial,sans-serif">
+<rect width="100%" height="100%" fill="#fff"/>
+<rect x="60" y="60" width="600" height="480" stroke="#222" stroke-width="6" fill="none" stroke-linecap="square"/>
+<path d="M300 60 V240 M300 300 V320 M60 320 H140 M200 320 H300 M220 320 V420 M220 480 V540" stroke="#222" stroke-width="6" fill="none" stroke-linecap="square"/>
+<rect x="500" y="64.0" width="156.0" height="40" fill="#eee" stroke="#888"/>
+<text x="580" y="90.0" font-size="11" text-anchor="middle" fill="#666">KITCHEN</text>
+<text x="180" y="180" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">BEDROOM</text>
+<text x="180" y="196" font-size="12" text-anchor="middle" fill="#555">12' x 13'</text>
+<text x="140" y="440" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">BATH</text>
+<text x="140" y="456" font-size="12" text-anchor="middle" fill="#555">8' x 11'</text>
+<text x="480" y="300" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">LIVING / DINING</text>
+<text x="480" y="316" font-size="12" text-anchor="middle" fill="#555">18' x 24'</text>
+<rect x="140" y="537" width="60" height="6" fill="#bde" stroke="#222"/>
+<rect x="400" y="537" width="60" height="6" fill="#bde" stroke="#222"/>
+<rect x="560" y="537" width="60" height="6" fill="#bde" stroke="#222"/>
+<rect x="657" y="420" width="6" height="60" fill="#fff"/>
+<text x="668" y="456.0" font-size="11" fill="#666">ENTRY</text>
+<path d="M60 30 H660 M60 24 V36 M660 24 V36" stroke="#c00" stroke-width="1.5"/>
+<text x="360" y="24" font-size="13" text-anchor="middle" fill="#c00">30' - 0"</text>
+<text x="360" y="585" font-size="11" text-anchor="middle" fill="#999">EXAMPLE FLOOR PLAN (not a real listing)</text>
+</svg>
