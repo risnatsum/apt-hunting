@@ -1,0 +1,32 @@
+name: Fetch listing assets
+
+# Downloads listing photos and floor plans into the repo and gathers floor plan
+# candidates from image search. Run it from the Actions tab, or it runs when
+# apartments.js or the search lists change.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [apartments.js, tools/searches.json, tools/pages.json, tools/fetch_assets.py]
+
+permissions:
+  contents: write
+
+concurrency: fetch-assets
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python tools/fetch_assets.py
+      - name: Commit downloaded files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add -A apartments candidates apartments.js
+          git diff --cached --quiet || git commit -m "Fetch listing assets and floor plan candidates"
+          git push
