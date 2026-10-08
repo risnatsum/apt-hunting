@@ -80,7 +80,7 @@ window.APARTMENTS = [
     commute: "",
     pros: "Newly renovated; close to MTR",
     cons: "",
-    notes: "Richfield Property (28hse #4036766). No floor plan on the listing.",
+    notes: "Richfield Property (28hse #4036766). Plan is Flat A from the building floor plan (A and B are mirror images).",
     photos: [
       "apartments/ying-wa-court/photo-01.jpg",
       "apartments/ying-wa-court/photo-02.jpg",
@@ -90,7 +90,8 @@ window.APARTMENTS = [
       "apartments/ying-wa-court/photo-06.jpg",
       "apartments/ying-wa-court/photo-07.jpg"
     ],
-    floorPlan: "",
+    floorPlan: "apartments/ying-wa-court/floorplan.jpg",
+    planFile: "apartments/ying-wa-court/plan.js",
     layout: []
   },
   {

@@ -200,6 +200,81 @@ HONOR["presets"] = {
     "empty": [],
 }
 
+# ---------------- Ying Wa Court, Flat A (2/F-30/F), 466 sq ft saleable -----------------
+# Floor plan (from Mus) prints dimensions in mm; 15,800 mm across = 847 px, so 0.536 px/cm.
+# Flats A and B are mirror images; A is traced.
+y = 0.536
+YING = {
+    "image": [990, 879],
+    "px_per_cm": y,
+    "origin": [598, 260],
+    "source": "Traced from the building's floor plan (2/F to 30/F) using its printed dimensions. Flats A and B are mirror images "
+              "and the listing doesn't say which this is, so A is shown. Sizes are approximate (about ±15 cm).",
+    "ceiling": 260,
+    "bounds": [585, 250, 950, 792],
+    "floors": [
+        [[598, 432, 940, 600], "wood"],
+        [[635, 600, 940, 758], "wood"],
+        [[598, 260, 685, 432], "kitchen"],
+        [[735, 432, 810, 545], "bath"],
+    ],
+    "walls": [
+        {"a": [598, 260], "b": [685, 260], "t": 12},
+        {"a": [685, 260], "b": [685, 432], "t": 12, "o": [{"s": 300, "e": 400, "k": "win"}]},
+        {"a": [598, 260], "b": [598, 600], "t": 22, "o": [{"s": 545, "e": 597, "k": "door", "side": 1, "h": "e"}]},
+        {"a": [598, 600], "b": [635, 600], "t": 22},
+        {"a": [635, 600], "b": [635, 758], "t": 22},
+        {"a": [685, 432], "b": [940, 432], "t": 16, "o": [{"s": 742, "e": 800, "k": "win", "frost": 1}, {"s": 818, "e": 902, "k": "win"}]},
+        {"a": [940, 432], "b": [940, 758], "t": 20},
+        {"a": [635, 758], "b": [940, 758], "t": 16, "o": [{"s": 642, "e": 778, "k": "win"}, {"s": 818, "e": 902, "k": "win"}]},
+        {"a": [735, 432], "b": [735, 545], "t": 10},
+        {"a": [735, 545], "b": [810, 545], "t": 10, "o": [{"s": 742, "e": 772, "k": "door", "side": -1, "h": "s"}]},
+        {"a": [810, 432], "b": [810, 600], "t": 10, "o": [{"s": 550, "e": 597, "k": "door", "side": -1, "h": "e"}]},
+        {"a": [785, 600], "b": [940, 600], "t": 10, "o": [{"s": 788, "e": 830, "k": "door", "side": 1, "h": "s"}]},
+        {"a": [785, 600], "b": [785, 758], "t": 10},
+    ],
+    "fixtures": [
+        {"r": [601, 285, 628, 428], "h": 90, "label": "Hob", "kind": "hob"},
+        {"r": [628, 264, 682, 288], "h": 90, "label": "Sink", "kind": "sink"},
+        {"r": [739, 436, 807, 458], "h": 55, "color": "#f4f4f2", "label": "Bath", "round": 1},
+        {"r": [762, 470, 786, 503], "h": 40, "color": "#f7f7f5", "label": "WC", "round": 1},
+        {"r": [784, 505, 807, 535], "h": 85, "label": "Basin", "kind": "sink"},
+        {"r": [815, 405, 905, 432], "h": 50, "color": "#ece6da", "label": "bay"},
+        {"r": [640, 758, 780, 785], "h": 50, "color": "#ece6da", "label": "bay window"},
+        {"r": [815, 758, 905, 785], "h": 50, "color": "#ece6da", "label": "bay"},
+    ],
+}
+cY = lambda px, py: [round((px - 598) / y), round((py - 260) / y)]
+YING["rooms"] = [
+    {"n": "Bedroom 1", "x": cY(875, 520)[0], "y": cY(875, 520)[1], "dim": "2.4 × 3.1 m"},
+    {"n": "Bedroom 2", "x": cY(862, 690)[0], "y": cY(862, 690)[1], "dim": "2.9 × 2.9 m"},
+    {"n": "Living", "x": cY(710, 690)[0], "y": cY(710, 690)[1], "dim": "2.8 × 2.9 m"},
+    {"n": "Dining", "x": cY(680, 500)[0], "y": cY(680, 500)[1]},
+    {"n": "Kitchen", "x": cY(655, 360)[0], "y": cY(655, 360)[1]},
+    {"n": "Bath", "x": cY(760, 528)[0], "y": cY(760, 528)[1]},
+]
+YING["notes"] = [{"x": cY(580, 570)[0] - 10, "y": cY(580, 570)[1], "text": "front door", "rot": -90}]
+YING["defaultPreset"] = "two"
+YING["presetNames"] = {"two": "Queen + double bed", "office": "Queen bed + home office", "empty": "Empty flat"}
+yb = [
+    ["bed-queen", cY(940, 0)[0] - 105, cY(0, 680)[1], 152, 190, 90],
+    ["nightstand", cY(940, 0)[0] - 28, cY(0, 680)[1] - 100, 35, 40, 90],
+    ["sofa3", cY(635, 0)[0] + 52, cY(0, 680)[1], 210, 90, 270],
+    ["coffee", cY(710, 0)[0], cY(0, 680)[1], 100, 55, 90],
+    ["tv", cY(785, 0)[0] - 26, cY(0, 680)[1], 140, 35, 90],
+    ["dining4", *cY(690, 520), 120, 75, 90], ["chair", *cY(665, 495), 45, 50, 270], ["chair", *cY(665, 545), 45, 50, 270],
+    ["chair", *cY(715, 495), 45, 50, 90], ["chair", *cY(715, 545), 45, 50, 90],
+    ["shoe", cY(598, 0)[0] + 25, cY(0, 470)[1], 80, 30, 270],
+]
+YING["presets"] = {
+    "two": yb + [["bed-double", cY(940, 0)[0] - 103, cY(0, 535)[1], 135, 190, 90], ["wardrobe", *cY(845, 440), 100, 55, 180]],
+    "office": yb + [["desk", cY(940, 0)[0] - 36, cY(0, 520)[1], 120, 60, 90], ["officechair", cY(940, 0)[0] - 100, cY(0, 520)[1], 60, 60, 270],
+                    ["bookshelf", *cY(860, 590), 80, 30, 180]],
+    "empty": [],
+}
+
+
 if __name__ == "__main__":
     write("beaudry-tower", BEAUDRY, "Beaudry Tower, Flat A (1 bedroom, 498 sq ft saleable).")
     write("honor-villa", HONOR, "Honor Villa, Flat A (2 bedrooms, 446 sq ft saleable).")
+    write("ying-wa-court", YING, "Ying Wa Court, Flat A (2 bedrooms, 466 sq ft saleable).")
