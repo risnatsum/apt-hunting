@@ -4,9 +4,10 @@
 //   enabled: false  -> ruled out (hidden unless "Show ruled out" is ticked)
 //
 // Files for each apartment live in apartments/<id>/.
-// calibration: two points on the floor plan image (in image pixels) and the
-// real distance between them in inches. Set it from the app with "Set scale",
-// then use "Export" and paste the result here so it is saved for everyone.
+// planFile: the traced plan (walls, doors, windows) used for the 2D/3D view.
+// calibration: for apartments without a traced plan, two points on the floor
+// plan image (in image pixels) and the real distance between them in cm. Set it
+// from the app with "Set scale", then Export so it is saved for everyone.
 // layout: saved furniture (also exported from the app).
 // allIn: rent plus any fees not included, per month (used to rank in Compare).
 
@@ -58,6 +59,7 @@ window.APARTMENTS = [
       "apartments/ming-sun-building/photo-23.jpg"
     ],
     floorPlan: "apartments/ming-sun-building/floorplan.jpg",
+    planFile: "apartments/ming-sun-building/plan.js",
     layout: []
   },
   {

@@ -35,88 +35,8 @@
         <div id="gallery" class="gallery"></div>
       </section>
 
-      <!-- Floor plan editor -->
-      <section id="tab-plan" class="tab-panel plan-panel">
-        <div class="plan-stage">
-          <div class="plan-toolbar">
-            <div class="seg" id="mode-seg">
-              <button data-mode="move" class="on" title="Drag furniture, drag background to pan">Move</button>
-              <button data-mode="measure" title="Click two points to measure">Measure</button>
-              <button data-mode="calibrate" title="Click both ends of a wall with a known length">Set scale</button>
-            </div>
-            <div class="seg">
-              <button id="zoom-out" title="Zoom out">−</button>
-              <button id="zoom-fit" title="Fit">Fit</button>
-              <button id="zoom-in" title="Zoom in">+</button>
-            </div>
-            <label class="check"><input type="checkbox" id="grid-toggle"> 1 ft grid</label>
-            <span id="mode-hint" class="mode-hint"></span>
-          </div>
-          <div id="plan-wrap" class="plan-wrap">
-            <svg id="plan-svg" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <pattern id="grid-pat" patternUnits="userSpaceOnUse" width="10" height="10">
-                  <path d="M10 0 L0 0 0 10" fill="none" stroke="#3b82f6" stroke-opacity=".25" vector-effect="non-scaling-stroke"/>
-                </pattern>
-              </defs>
-              <g id="world">
-                <image id="plan-img" x="0" y="0"/>
-                <rect id="grid-rect" x="0" y="0" fill="url(#grid-pat)" visibility="hidden" pointer-events="none"/>
-                <g id="furniture-layer"></g>
-                <g id="overlay-layer"></g>
-              </g>
-            </svg>
-            <div id="plan-empty" class="plan-empty" hidden></div>
-          </div>
-        </div>
-
-        <div class="plan-side">
-          <div class="card" id="scale-card"></div>
-
-          <div class="card" id="selected-card" hidden>
-            <h3>Selected</h3>
-            <label>Name <input id="sel-name"></label>
-            <div class="row2">
-              <label>Width <input id="sel-w" placeholder="e.g. 7'"></label>
-              <label>Depth <input id="sel-d" placeholder="e.g. 36in"></label>
-            </div>
-            <div class="row2">
-              <label>Color <input id="sel-color" type="color"></label>
-              <label>Rotation <input id="sel-rot" type="number" step="15"></label>
-            </div>
-            <div class="btn-row">
-              <button id="sel-rotate">Rotate 90°</button>
-              <button id="sel-dup">Duplicate</button>
-              <button id="sel-del" class="danger">Delete</button>
-            </div>
-            <p class="hint">Keys: arrows nudge 1" (Shift = 6"), R rotates, Delete removes.</p>
-          </div>
-
-          <div class="card">
-            <h3>Add furniture</h3>
-            <div id="library" class="library"></div>
-            <details>
-              <summary>Custom piece</summary>
-              <label>Name <input id="custom-name" placeholder="Our couch"></label>
-              <div class="row2">
-                <label>Width <input id="custom-w" placeholder="88in or 7'4&quot;"></label>
-                <label>Depth <input id="custom-d" placeholder="38in"></label>
-              </div>
-              <button id="custom-add">Add</button>
-            </details>
-          </div>
-
-          <div class="card">
-            <h3>Save</h3>
-            <p class="hint">Changes save in this browser automatically. Export to keep them in the repo or move them to another device.</p>
-            <div class="btn-row">
-              <button id="export-btn">Export</button>
-              <label class="file-btn">Import<input type="file" id="import-file" accept=".json" hidden></label>
-              <button id="clear-btn" class="danger">Clear furniture</button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <!-- Floor plan: 2D/3D planner (planner.js) -->
+      <section id="tab-plan" class="tab-panel"><div id="plan-root"></div></section>
 
       <!-- Compare -->
       <section id="tab-compare" class="tab-panel">
@@ -147,8 +67,10 @@
     </div>
   </dialog>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="apartments.js"></script>
-  <script src="furniture.js"></script>
+  <script src="planner.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
