@@ -185,9 +185,39 @@
   }
 
   // ---------- Compare ----------
+  // ---------- Scores ----------
+  // Door-to-door minutes and walk minutes both map to 1-5 (see RUBRIC).
+  const TIME_BANDS = [15, 22, 30, 40];
+  const WALK_BANDS = [5, 8, 12, 16];
+  const band = (m, bands) => m == null ? null : 5 - bands.filter((b) => m > b).length;
+  const DEST = window.COMMUTE_TO || [];
+  const W_MTR = 0.2, W_BUS = 0.1;
+  function transportScore(a) {
+    const t = a.transport;
+    if (!t) return null;
+    let sum = 0, w = 0;
+    for (const d of DEST) { const sc = band(t[d.key]?.min, TIME_BANDS); if (sc != null) { sum += sc * d.weight; w += d.weight; } }
+    const m = band(t.mtrWalk, WALK_BANDS), b = band(t.busWalk, WALK_BANDS);
+    if (m != null) { sum += m * W_MTR; w += W_MTR; }
+    if (b != null) { sum += b * W_BUS; w += W_BUS; }
+    return w ? sum / w : null;
+  }
+  const PHOTO_FACTORS = [["light", "Sunlight / light"], ["kitchen", "Kitchen"], ["bathroom", "Bathroom"], ["condition", "Condition"], ["view", "View"], ["storage", "Storage"]];
+  function photoScore(a) {
+    const r = a.photoReview;
+    if (!r) return null;
+    const v = PHOTO_FACTORS.map(([k]) => r[k]?.[0]).filter((x) => x != null);
+    return v.length ? v.reduce((x, y) => x + y, 0) / v.length : null;
+  }
+  const dots = (n) => `<span class="dots" title="${n}/5">${"●".repeat(n)}<i>${"●".repeat(5 - n)}</i></span>`;
+  const scoreText = (x) => x == null ? "" : `<b class="score">${x.toFixed(1)}</b> / 5`;
+  const mapsLink = (from, to) => `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(from)}&destination=${encodeURIComponent(to)}&travelmode=transit`;
+  const origin = (a) => `${a.name}, ${a.address}, Hong Kong`;
+
   const COMPARE_ROWS = [
     ["Photo", (a) => a.photos[0] ? `<img src="${encodeURI(a.photos[0])}" alt="">` : "", true],
     ["Rent", (a) => money(a.rent) && money(a.rent) + "/mo"],
+    ["Rent ±10%", (a) => a.rent ? `${money(Math.round(a.rent * 0.9))} – ${money(Math.round(a.rent * 1.1))}` : ""],
     ["Fees", (a) => a.fees],
     ["All-in / month", (a) => money(a.allIn)],
     ["Beds / baths", (a) => [a.beds, a.baths].every((x) => x == null) ? "" : `${a.beds ?? "?"} bd / ${a.baths ?? "?"} ba`],
@@ -196,14 +226,48 @@
     ["Floor", (a) => a.floor],
     ["Per sq ft", (a) => a.rent && a.sqft ? (window.CURRENCY || "$") + (a.rent / a.sqft).toFixed(2) : ""],
     ["Available", (a) => a.available],
+    ["section", "Transport (estimates)"],
+    ["Transport score", (a) => scoreText(transportScore(a)), true],
+    ["MTR", (a) => a.transport ? `${dots(band(a.transport.mtrWalk, WALK_BANDS))} ${esc(a.transport.mtr)}, ${a.transport.mtrWalk} min walk` : "", true],
+    ["Bus / minibus", (a) => a.transport ? `${dots(band(a.transport.busWalk, WALK_BANDS))} ${esc(a.transport.bus)}, ${a.transport.busWalk} min walk` : "", true],
+    ...DEST.map((d) => [d.label, (a) => {
+      const t = a.transport?.[d.key];
+      if (!t) return "";
+      return `${dots(band(t.min, TIME_BANDS))} <b>~${t.min} min</b><div class="sub">${esc(t.how)}</div><a href="${mapsLink(origin(a), d.place)}" target="_blank" rel="noopener">Check in Google Maps ↗</a>`;
+    }, true]),
     ["Commute", (a) => a.commute],
+    ["section", "From the photos"],
+    ["Photo score", (a) => scoreText(photoScore(a)), true],
+    ...PHOTO_FACTORS.map(([k, label]) => [label, (a) => a.photoReview?.[k] ? `${dots(a.photoReview[k][0])}<div class="sub">${esc(a.photoReview[k][1])}</div>` : "", true]),
+    ["section", "Notes"],
     ["Pros", (a) => a.pros],
     ["Cons", (a) => a.cons],
     ["Notes", (a) => a.notes],
     ["Listing", (a) => a.url ? `<a href="${encodeURI(a.url)}" target="_blank" rel="noopener">Open ↗</a>` : "", true],
   ];
-  // Rows where lower (rent, $/sqft) or higher (sqft) is better get the best cell highlighted.
-  const BEST = { "Rent": (a) => -a.rent, "All-in / month": (a) => a.allIn ? -a.allIn : null, "Size": (a) => a.sqft, "Per sq ft": (a) => a.rent && a.sqft ? -(a.rent / a.sqft) : null };
+  // Rows where lower (rent, $/sqft) or higher (sqft, scores) is better get the best cell highlighted.
+  const BEST = {
+    "Rent": (a) => -a.rent, "All-in / month": (a) => a.allIn ? -a.allIn : null, "Size": (a) => a.sqft, "Per sq ft": (a) => a.rent && a.sqft ? -(a.rent / a.sqft) : null,
+    "Transport score": transportScore, "Photo score": photoScore,
+    "MTR": (a) => a.transport ? -a.transport.mtrWalk : null,
+    ...Object.fromEntries(DEST.map((d) => [d.label, (a) => a.transport?.[d.key] ? -a.transport[d.key].min : null])),
+    ...Object.fromEntries(PHOTO_FACTORS.map(([k, label]) => [label, (a) => a.photoReview?.[k]?.[0] ?? null])),
+  };
+
+  function renderRubric() {
+    const rng = (bands, unit) => [`≤${bands[0]} ${unit}`, `${bands[0] + 1}–${bands[1]}`, `${bands[1] + 1}–${bands[2]}`, `${bands[2] + 1}–${bands[3]}`, `>${bands[3]} ${unit}`];
+    const t = rng(TIME_BANDS, "min"), w = rng(WALK_BANDS, "min");
+    const weights = [...DEST.map((d) => `${d.label} ${Math.round(d.weight * 100)}%`), `MTR walk ${W_MTR * 100}%`, `bus walk ${W_BUS * 100}%`].join(", ");
+    $("#rubric").innerHTML = `<summary>How the scores work</summary>
+      <h4>Transport score</h4>
+      <p>Each factor gets 1 to 5, then a weighted average: ${esc(weights)}.</p>
+      <table class="rubric-table"><thead><tr><th>Score</th><th>Door-to-door by public transport</th><th>Walk to MTR or bus stop</th></tr></thead><tbody>
+      ${[0, 1, 2, 3, 4].map((i) => `<tr><td>${dots(5 - i)}</td><td>${t[i]}</td><td>${w[i]}</td></tr>`).join("")}
+      </tbody></table>
+      <p class="hint">Times are estimates for a weekday morning (walk + wait + ride), not live data. Use the Google Maps links in each cell to check.</p>
+      <h4>Photo score</h4>
+      <p>The average of six 1 to 5 ratings judged from the listing photos: sunlight/light (window size, aspect, how close the next building is), kitchen (size, hob, counter, washer, fridge), bathroom (size, finish, window), condition (age of finishes), view, and storage (built-ins). 3 is a typical Hong Kong flat at this rent. Photos are chosen by agents, so treat these as a first pass to check at the viewing.</p>`;
+  }
 
   function esc(s) { return String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
   async function renderCompare() {
@@ -213,6 +277,7 @@
     if (!apts.length) { table.innerHTML = ""; plans.innerHTML = `<div class="empty">No apartments enabled.</div>`; return; }
     let html = `<thead><tr><th></th>${apts.map((a) => `<th>${esc(a.name || a.id)}</th>`).join("")}</tr></thead><tbody>`;
     for (const [label, fn, raw] of COMPARE_ROWS) {
+      if (label === "section") { html += `<tr class="row-section"><th colspan="${apts.length + 1}">${esc(fn)}</th></tr>`; continue; }
       const vals = apts.map(fn);
       if (vals.every((v) => !v)) continue;
       let bestIdx = -1;
@@ -224,6 +289,7 @@
       html += `<tr><th>${label}</th>${vals.map((v, i) => `<td class="${i === bestIdx ? "best" : ""}">${raw ? v : esc(v)}</td>`).join("")}</tr>`;
     }
     table.innerHTML = html + "</tbody>";
+    renderRubric();
 
     // Plans at a common scale: K screen pixels per cm.
     const K = 0.42;

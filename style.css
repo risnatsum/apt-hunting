@@ -196,6 +196,17 @@ main { flex: 1; min-width: 0; overflow: auto; }
 .compare-table img { width: 100%; max-width: 220px; aspect-ratio: 4/3; object-fit: cover; border-radius: 6px; }
 .best { background: rgba(34, 160, 80, .14); }
 .section-title { font-size: 16px; margin: 24px 0 2px; }
+.compare-table .row-section th { position: static; background: var(--accent-soft); color: var(--ink); font-weight: 600; font-size: 13px; }
+.compare-table .sub { color: var(--muted); font-size: 12px; margin: 2px 0; }
+.compare-table .score { font-size: 18px; }
+.dots { color: var(--accent); letter-spacing: 1px; font-size: 11px; }
+.dots i { font-style: normal; color: var(--line); }
+.rubric { margin: 14px 0 6px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 14px; }
+.rubric summary { cursor: pointer; font-weight: 600; }
+.rubric h4 { margin: 12px 0 4px; }
+.rubric p { margin: 4px 0; max-width: 72ch; }
+.rubric-table { border-collapse: collapse; margin: 6px 0; }
+.rubric-table th, .rubric-table td { border: 1px solid var(--line); padding: 4px 10px; text-align: left; }
 .compare-plans { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-end; }
 .compare-plans figure { margin: 0; background: var(--sheet); border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
 .compare-plans figcaption { color: var(--ink); font-size: 12px; margin-top: 4px; text-align: center; }
