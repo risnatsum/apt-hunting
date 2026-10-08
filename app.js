@@ -29,7 +29,7 @@
   }
 
   // ---------- Lengths ----------
-  // Accepts 12'6", 12' 6, 12.5ft, 150in, 150", 3.8m, 380cm. A bare number is feet.
+  // Accepts 12'6", 12' 6, 12.5ft, 150in, 150", 3.8m, 380cm, 3800mm. A bare number is feet.
   function parseLength(str) {
     if (str == null) return null;
     const s = String(str).trim().toLowerCase().replace(/[’′]/g, "'").replace(/[”″]/g, '"');
@@ -39,6 +39,7 @@
       return parseFloat(m[1]) * 12 + (m[2] ? parseFloat(m[2]) : 0);
     }
     if ((m = s.match(/^(\d+(?:\.\d+)?)\s*(?:"|in|inch|inches)$/))) return parseFloat(m[1]);
+    if ((m = s.match(/^(\d+(?:\.\d+)?)\s*mm$/))) return parseFloat(m[1]) / 25.4;
     if ((m = s.match(/^(\d+(?:\.\d+)?)\s*cm$/))) return parseFloat(m[1]) / 2.54;
     if ((m = s.match(/^(\d+(?:\.\d+)?)\s*m$/))) return parseFloat(m[1]) * 100 / 2.54;
     if ((m = s.match(/^(\d+(?:\.\d+)?)$/))) return parseFloat(m[1]) * 12;
@@ -51,7 +52,8 @@
     if (inch === 12) { ft += 1; inch = 0; }
     return ft ? `${ft}' ${inch}"` : `${inch}"`;
   }
-  const money = (n) => (n || n === 0) && !isNaN(n) ? "$" + Number(n).toLocaleString() : "";
+  const sizeText = (a) => !a.sqft ? "" : `${a.sqft} sq ft` + (a.grossSqft ? ` saleable (${a.grossSqft} gross)` : "");
+  const money = (n) => (n || n === 0) && !isNaN(n) ? (window.CURRENCY || "$") + Number(n).toLocaleString() : "";
 
   // ---------- Image sizes ----------
   const imgSize = {};
@@ -162,7 +164,7 @@
     add("Rent", money(apt.rent) && money(apt.rent) + "/mo");
     add("Beds", apt.beds != null ? String(apt.beds) : "");
     add("Baths", apt.baths != null ? String(apt.baths) : "");
-    add("Size", apt.sqft ? apt.sqft + " sq ft" : "");
+    add("Size", sizeText(apt));
     add("Available", apt.available);
     head.appendChild(facts);
     if (apt.url) {
@@ -252,7 +254,7 @@
     renderLibrary();
     if (!apt || !apt.floorPlan) {
       empty.hidden = false;
-      empty.textContent = apt ? "No floor plan for this apartment yet." : "No apartment selected.";
+      empty.textContent = apt ? "No floor plan for this apartment yet. Send Claude an image or link to one and it will be added." : "No apartment selected.";
       furnLayer.innerHTML = ""; overlay.innerHTML = ""; planImg.removeAttribute("href");
       return;
     }
@@ -466,7 +468,7 @@
       html += `<div class="scale-ok">Set: the line you drew is ${fmtLength(c.inches)}.</div>`;
       const size = imgSize[apt.floorPlan];
       if (size && apt.sqft) {
-        html += `<p class="hint">Whole image is about ${fmtLength(size.w / s)} × ${fmtLength(size.h / s)}. Listing says ${apt.sqft} sq ft. Use Measure on a room to sanity-check.</p>`;
+        html += `<p class="hint">Whole image is about ${fmtLength(size.w / s)} × ${fmtLength(size.h / s)}. Listing says ${sizeText(apt)}. Use Measure on a room to sanity-check.</p>`;
       } else {
         html += `<p class="hint">Use Measure on a room with a printed size to double-check.</p>`;
       }
@@ -619,9 +621,12 @@
     ["Photo", (a) => a.photos[0] ? `<img src="${encodeURI(a.photos[0])}" alt="">` : "", true],
     ["Rent", (a) => money(a.rent) && money(a.rent) + "/mo"],
     ["Fees", (a) => a.fees],
+    ["All-in / month", (a) => money(a.allIn)],
     ["Beds / baths", (a) => [a.beds, a.baths].every((x) => x == null) ? "" : `${a.beds ?? "?"} bd / ${a.baths ?? "?"} ba`],
-    ["Size", (a) => a.sqft ? `${a.sqft} sq ft` : ""],
-    ["$ per sq ft", (a) => a.rent && a.sqft ? "$" + (a.rent / a.sqft).toFixed(2) : ""],
+    ["Size", (a) => sizeText(a)],
+    ["Building", (a) => a.building],
+    ["Floor", (a) => a.floor],
+    ["Per sq ft", (a) => a.rent && a.sqft ? (window.CURRENCY || "$") + (a.rent / a.sqft).toFixed(2) : ""],
     ["Available", (a) => a.available],
     ["Commute", (a) => a.commute],
     ["Pros", (a) => a.pros],
@@ -630,7 +635,7 @@
     ["Listing", (a) => a.url ? `<a href="${encodeURI(a.url)}" target="_blank" rel="noopener">Open ↗</a>` : "", true],
   ];
   // Rows where lower (rent, $/sqft) or higher (sqft) is better get the best cell highlighted.
-  const BEST = { "Rent": (a) => -a.rent, "Size": (a) => a.sqft, "$ per sq ft": (a) => a.rent && a.sqft ? -(a.rent / a.sqft) : null };
+  const BEST = { "Rent": (a) => -a.rent, "All-in / month": (a) => a.allIn ? -a.allIn : null, "Size": (a) => a.sqft, "Per sq ft": (a) => a.rent && a.sqft ? -(a.rent / a.sqft) : null };
 
   function esc(s) { return String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
   async function renderCompare() {

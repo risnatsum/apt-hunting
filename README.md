@@ -17,7 +17,7 @@ The easiest way to add one is to send Claude the listing link. It collects the p
 
 ## Floor plan tools
 
-1. **Set scale:** click both ends of a wall or dimension line whose length is printed on the plan, then type that length (`12'6"`, `150in` and `3.8m` all work). Everything after that is in real units.
+1. **Set scale:** click both ends of a wall or dimension line whose length is printed on the plan, then type that length (`12'6"`, `150in`, `3.8m` and `3800mm` all work). Everything after that is in real units.
 2. **Measure:** click two points to get the real distance.
 3. **Add furniture** from the library, or add a custom piece with your own measurements. Drag pieces to move them. With a piece selected, R rotates it by 90° (Shift+R by 15°), the arrow keys nudge it, and Delete removes it.
 
