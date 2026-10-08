@@ -4,10 +4,10 @@ window.PLANS = window.PLANS || {};
 window.PLANS["beaudry-tower"] = {
  "source": "Traced from the developer's plan for Flat A (2/F to 29/F, 498 sq ft saleable), scaled to the listed area. The listing doesn't say which flat; A is the only 498 sq ft unit. Sizes are approximate (about ±15 cm).",
  "ceiling": 260,
- "defaultPreset": "lounge",
+ "defaultPreset": "study",
  "presetNames": {
-  "lounge": "Lounge + dining table",
   "study": "Lounge + work desk",
+  "lounge": "Lounge + dining table",
   "empty": "Empty flat"
  },
  "presets": {

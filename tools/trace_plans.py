@@ -105,8 +105,8 @@ BEAUDRY["rooms"] = [
 BEAUDRY["notes"] = [{"x": cm(1330, 775)[0] + 18, "y": cm(1330, 775)[1], "text": "front door", "rot": 90},
                     {"x": cm(655, 1700)[0], "y": cm(655, 1700)[1], "text": "facing Bonham Road (sea view)"}]
 c = lambda px, py: list(cm(px, py))
-BEAUDRY["defaultPreset"] = "lounge"
-BEAUDRY["presetNames"] = {"lounge": "Lounge + dining table", "study": "Lounge + work desk", "empty": "Empty flat"}
+BEAUDRY["defaultPreset"] = "study"
+BEAUDRY["presetNames"] = {"study": "Lounge + work desk", "lounge": "Lounge + dining table", "empty": "Empty flat"}
 bed = [["bed-queen", c(130, 0)[0] + 103, 125, 152, 190, 270]]
 base = [
     *bed,
@@ -182,8 +182,9 @@ HONOR["rooms"] = [
 ]
 HONOR["notes"] = [{"x": cH(800, 80)[0], "y": cH(800, 80)[1] - 4, "text": "front door (approx.)"},
                   {"x": cH(570, 600)[0], "y": cH(570, 600)[1] + 8, "text": "facing Caine Road"}]
-HONOR["defaultPreset"] = "two"
-HONOR["presetNames"] = {"two": "Double bed + guest/study", "office": "Double bed + home office", "empty": "Empty flat"}
+# Laid out for one person: second bedroom is a home office by default.
+HONOR["defaultPreset"] = "office"
+HONOR["presetNames"] = {"office": "Bedroom + home office", "two": "Bedroom + guest bed", "empty": "Empty flat"}
 hb = [
     ["bed-double", cH(272, 0)[0] + 101, cH(0, 455)[1], 135, 190, 270],
     ["nightstand", cH(272, 0)[0] + 20, cH(0, 355)[1], 35, 40, 270],
@@ -195,8 +196,8 @@ hb = [
     ["shoe", *cH(830, 150), 80, 30, 270],
 ]
 HONOR["presets"] = {
-    "two": hb + [["bed-single", *cH(585, 455), 90, 190, 180], ["dresser", *cH(500, 525), 80, 40, 180]],
     "office": hb + [["desk", *cH(537, 515), 120, 60, 180], ["officechair", *cH(537, 465), 60, 60], ["bookshelf", *cH(612, 420), 80, 30, 270]],
+    "two": hb + [["bed-single", *cH(585, 455), 90, 190, 180], ["dresser", *cH(500, 525), 80, 40, 180]],
     "empty": [],
 }
 
@@ -254,8 +255,9 @@ YING["rooms"] = [
     {"n": "Bath", "x": cY(760, 528)[0], "y": cY(760, 528)[1]},
 ]
 YING["notes"] = [{"x": cY(580, 570)[0] - 10, "y": cY(580, 570)[1], "text": "front door", "rot": -90}]
-YING["defaultPreset"] = "two"
-YING["presetNames"] = {"two": "Queen + double bed", "office": "Queen bed + home office", "empty": "Empty flat"}
+# Laid out for one person: second bedroom is a home office by default.
+YING["defaultPreset"] = "office"
+YING["presetNames"] = {"office": "Bedroom + home office", "two": "Bedroom + guest bed", "empty": "Empty flat"}
 yb = [
     ["bed-queen", cY(940, 0)[0] - 105, cY(0, 680)[1], 152, 190, 90],
     ["nightstand", cY(940, 0)[0] - 28, cY(0, 680)[1] - 100, 35, 40, 90],
@@ -267,9 +269,9 @@ yb = [
     ["shoe", cY(598, 0)[0] + 25, cY(0, 470)[1], 80, 30, 270],
 ]
 YING["presets"] = {
-    "two": yb + [["bed-double", cY(940, 0)[0] - 103, cY(0, 535)[1], 135, 190, 90], ["wardrobe", *cY(845, 440), 100, 55, 180]],
     "office": yb + [["desk", cY(940, 0)[0] - 36, cY(0, 520)[1], 120, 60, 90], ["officechair", cY(940, 0)[0] - 100, cY(0, 520)[1], 60, 60, 270],
-                    ["bookshelf", *cY(860, 590), 80, 30, 180]],
+                    ["bookshelf", *cY(860, 590), 80, 30, 180], ["wardrobe", cY(785, 0)[0] + 33, cY(0, 715)[1], 100, 55, 90]],
+    "two": yb + [["bed-double", cY(940, 0)[0] - 103, cY(0, 535)[1], 135, 190, 90], ["wardrobe", *cY(845, 440), 100, 55, 180]],
     "empty": [],
 }
 

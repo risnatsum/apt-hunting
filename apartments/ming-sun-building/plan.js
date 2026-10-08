@@ -53,8 +53,8 @@ window.PLANS["ming-sun-building"] = {
   marks: [{ x: 14, y: 400, l: "AC" }, { x: 150, y: 16, l: "AC" }],
   notes: [{ x: -30, y: 280, text: "harbour / skyline view", rot: -90 }, { x: 878, y: 528, text: "front door" }],
   // Furniture presets: [type, x, y, w, d, rotation]
-  defaultPreset: "dining",
-  presetNames: { dining: "Lounge + dining table", study: "Lounge + work desk", alcove: "Big wardrobe in the alcove", empty: "Empty flat" },
+  defaultPreset: "study",
+  presetNames: { study: "Lounge + work desk", dining: "Lounge + dining table", alcove: "Big wardrobe in the alcove", empty: "Empty flat" },
   presets: {
     dining: [
       ["rug", 112, 410, 200, 140], ["sofa3", 112, 301, 210, 85], ["tv", 77, 538, 130, 30, 180], ["coffee", 112, 405, 100, 50],
