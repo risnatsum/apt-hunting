@@ -112,7 +112,7 @@ window.APARTMENTS = [
     commute: "",
     pros: "Large bedroom with built-in wardrobe; open view; ~5 min walk to MTR",
     cons: "Older building (1989)",
-    notes: "At Home Property (28hse #4042863). No floor plan on the listing.",
+    notes: "At Home Property (28hse #4042863). Plan is Flat A from the developer's brochure, the only 498 sq ft unit in the building.",
     photos: [
       "apartments/beaudry-tower/photo-01.jpg",
       "apartments/beaudry-tower/photo-02.jpg",
@@ -125,7 +125,8 @@ window.APARTMENTS = [
       "apartments/beaudry-tower/photo-09.jpg",
       "apartments/beaudry-tower/photo-10.jpg"
     ],
-    floorPlan: "",
+    floorPlan: "apartments/beaudry-tower/floorplan.jpg",
+    planFile: "apartments/beaudry-tower/plan.js",
     layout: []
   },
   {
@@ -147,7 +148,7 @@ window.APARTMENTS = [
     commute: "",
     pros: "Large wardrobe; convenient location",
     cons: "~13 min walk to MTR; smallest of the four",
-    notes: "28hse #4013550. No floor plan on the listing.",
+    notes: "28hse #4013550. Plan is Flat A from the developer's brochure, the only 446 sq ft unit in the building.",
     photos: [
       "apartments/honor-villa/photo-01.jpg",
       "apartments/honor-villa/photo-02.jpg",
@@ -156,7 +157,8 @@ window.APARTMENTS = [
       "apartments/honor-villa/photo-05.jpg",
       "apartments/honor-villa/photo-06.jpg"
     ],
-    floorPlan: "",
+    floorPlan: "apartments/honor-villa/floorplan.jpg",
+    planFile: "apartments/honor-villa/plan.js",
     layout: []
   },
   {
